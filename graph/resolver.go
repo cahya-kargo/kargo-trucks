@@ -1,6 +1,6 @@
 package graph
 
-import "github.com/cahyacaa/kargo-trucks/graph/model"
+import "github.com/cahya-kargo/kargo-trucks/graph/model"
 
 // This file will not be regenerated automatically.
 //

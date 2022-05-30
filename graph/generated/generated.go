@@ -13,7 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/cahyacaa/kargo-trucks/graph/model"
+	"github.com/cahya-kargo/kargo-trucks/graph/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -160,7 +160,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Shipment.CreatedAt(childComplexity), true
 
-	case "Shipment.delivery_date":
+	case "Shipment.deliveryDate":
 		if e.complexity.Shipment.DeliveryDate == nil {
 			break
 		}
@@ -337,7 +337,7 @@ var sources = []*ast.Source{
  name: String!
  origin: String!
  destination: String!
- delivery_date: String!
+ deliveryDate: String!
  createdAt: String!
  updatedAt: String!
  truck: Truck!
@@ -572,7 +572,7 @@ func (ec *executionContext) _Mutation_saveTruck(ctx context.Context, field graph
 	}
 	res := resTmp.(*model.Truck)
 	fc.Result = res
-	return ec.marshalNTruck2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, field.Selections, res)
+	return ec.marshalNTruck2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_saveTruck(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -641,7 +641,7 @@ func (ec *executionContext) _Mutation_updateTruck(ctx context.Context, field gra
 	}
 	res := resTmp.(*model.Truck)
 	fc.Result = res
-	return ec.marshalNTruck2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, field.Selections, res)
+	return ec.marshalNTruck2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_updateTruck(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -710,7 +710,7 @@ func (ec *executionContext) _Mutation_saveShipment(ctx context.Context, field gr
 	}
 	res := resTmp.(*model.Shipment)
 	fc.Result = res
-	return ec.marshalNShipment2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx, field.Selections, res)
+	return ec.marshalNShipment2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_saveShipment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -729,8 +729,8 @@ func (ec *executionContext) fieldContext_Mutation_saveShipment(ctx context.Conte
 				return ec.fieldContext_Shipment_origin(ctx, field)
 			case "destination":
 				return ec.fieldContext_Shipment_destination(ctx, field)
-			case "delivery_date":
-				return ec.fieldContext_Shipment_delivery_date(ctx, field)
+			case "deliveryDate":
+				return ec.fieldContext_Shipment_deliveryDate(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Shipment_createdAt(ctx, field)
 			case "updatedAt":
@@ -787,7 +787,7 @@ func (ec *executionContext) _Query_paginatedTrucks(ctx context.Context, field gr
 	}
 	res := resTmp.([]*model.Truck)
 	fc.Result = res
-	return ec.marshalNTruck2ᚕᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruckᚄ(ctx, field.Selections, res)
+	return ec.marshalNTruck2ᚕᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruckᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_paginatedTrucks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -845,7 +845,7 @@ func (ec *executionContext) _Query_paginatedShipments(ctx context.Context, field
 	}
 	res := resTmp.([]*model.Shipment)
 	fc.Result = res
-	return ec.marshalNShipment2ᚕᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipmentᚄ(ctx, field.Selections, res)
+	return ec.marshalNShipment2ᚕᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipmentᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_paginatedShipments(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -864,8 +864,8 @@ func (ec *executionContext) fieldContext_Query_paginatedShipments(ctx context.Co
 				return ec.fieldContext_Shipment_origin(ctx, field)
 			case "destination":
 				return ec.fieldContext_Shipment_destination(ctx, field)
-			case "delivery_date":
-				return ec.fieldContext_Shipment_delivery_date(ctx, field)
+			case "deliveryDate":
+				return ec.fieldContext_Shipment_deliveryDate(ctx, field)
 			case "createdAt":
 				return ec.fieldContext_Shipment_createdAt(ctx, field)
 			case "updatedAt":
@@ -1188,8 +1188,8 @@ func (ec *executionContext) fieldContext_Shipment_destination(ctx context.Contex
 	return fc, nil
 }
 
-func (ec *executionContext) _Shipment_delivery_date(ctx context.Context, field graphql.CollectedField, obj *model.Shipment) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Shipment_delivery_date(ctx, field)
+func (ec *executionContext) _Shipment_deliveryDate(ctx context.Context, field graphql.CollectedField, obj *model.Shipment) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Shipment_deliveryDate(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -1219,7 +1219,7 @@ func (ec *executionContext) _Shipment_delivery_date(ctx context.Context, field g
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Shipment_delivery_date(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Shipment_deliveryDate(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Shipment",
 		Field:      field,
@@ -1348,7 +1348,7 @@ func (ec *executionContext) _Shipment_truck(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Truck)
 	fc.Result = res
-	return ec.marshalNTruck2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, field.Selections, res)
+	return ec.marshalNTruck2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Shipment_truck(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3694,9 +3694,9 @@ func (ec *executionContext) _Shipment(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "delivery_date":
+		case "deliveryDate":
 
-			out.Values[i] = ec._Shipment_delivery_date(ctx, field, obj)
+			out.Values[i] = ec._Shipment_deliveryDate(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
 				invalids++
@@ -4173,11 +4173,11 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNShipment2githubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx context.Context, sel ast.SelectionSet, v model.Shipment) graphql.Marshaler {
+func (ec *executionContext) marshalNShipment2githubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx context.Context, sel ast.SelectionSet, v model.Shipment) graphql.Marshaler {
 	return ec._Shipment(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNShipment2ᚕᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipmentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Shipment) graphql.Marshaler {
+func (ec *executionContext) marshalNShipment2ᚕᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipmentᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Shipment) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4201,7 +4201,7 @@ func (ec *executionContext) marshalNShipment2ᚕᚖgithubᚗcomᚋcahyacaaᚋkar
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNShipment2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx, sel, v[i])
+			ret[i] = ec.marshalNShipment2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4221,7 +4221,7 @@ func (ec *executionContext) marshalNShipment2ᚕᚖgithubᚗcomᚋcahyacaaᚋkar
 	return ret
 }
 
-func (ec *executionContext) marshalNShipment2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx context.Context, sel ast.SelectionSet, v *model.Shipment) graphql.Marshaler {
+func (ec *executionContext) marshalNShipment2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐShipment(ctx context.Context, sel ast.SelectionSet, v *model.Shipment) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
@@ -4246,11 +4246,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNTruck2githubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx context.Context, sel ast.SelectionSet, v model.Truck) graphql.Marshaler {
+func (ec *executionContext) marshalNTruck2githubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx context.Context, sel ast.SelectionSet, v model.Truck) graphql.Marshaler {
 	return ec._Truck(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNTruck2ᚕᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruckᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Truck) graphql.Marshaler {
+func (ec *executionContext) marshalNTruck2ᚕᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruckᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Truck) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -4274,7 +4274,7 @@ func (ec *executionContext) marshalNTruck2ᚕᚖgithubᚗcomᚋcahyacaaᚋkargo�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNTruck2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, sel, v[i])
+			ret[i] = ec.marshalNTruck2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -4294,7 +4294,7 @@ func (ec *executionContext) marshalNTruck2ᚕᚖgithubᚗcomᚋcahyacaaᚋkargo�
 	return ret
 }
 
-func (ec *executionContext) marshalNTruck2ᚖgithubᚗcomᚋcahyacaaᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx context.Context, sel ast.SelectionSet, v *model.Truck) graphql.Marshaler {
+func (ec *executionContext) marshalNTruck2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruck(ctx context.Context, sel ast.SelectionSet, v *model.Truck) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")

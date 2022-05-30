@@ -7,12 +7,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/cahyacaa/kargo-trucks/graph/generated"
-	"github.com/cahyacaa/kargo-trucks/graph/model"
+	"github.com/cahya-kargo/kargo-trucks/graph/generated"
+	"github.com/cahya-kargo/kargo-trucks/graph/model"
 )
 
 func (r *mutationResolver) SaveTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error) {
-
+	fmt.Println(id)
 	truck := &model.Truck{
 		ID:      fmt.Sprintf("TRUCK-%d", len(r.Trucks)+1),
 		PlateNo: plateNo,

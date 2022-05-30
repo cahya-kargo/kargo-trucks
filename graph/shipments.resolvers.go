@@ -5,18 +5,33 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
-	"github.com/cahyacaa/kargo-trucks/graph/model"
+	"github.com/cahya-kargo/kargo-trucks/graph/model"
 )
 
 func (r *mutationResolver) SaveShipment(ctx context.Context, id *string, name string, origin string, destination string, deliveryDate string, truckID string) (*model.Shipment, error) {
+	truck := &model.Truck{}
+	for _, v := range r.Trucks {
+		if v.ID == truckID {
+			truck.ID = v.ID
+			truck.PlateNo = v.PlateNo
+		}
+	}
+	for _, v := range r.Shipments {
+		if v.Truck.ID == truckID {
+			return nil, errors.New("Trucks Unavailable")
+		}
+	}
+
 	shipment := &model.Shipment{
 		ID:           fmt.Sprintf("SHIPMENT-%d", len(r.Shipments)+1),
 		Name:         name,
 		Origin:       origin,
 		Destination:  destination,
 		DeliveryDate: deliveryDate,
+		Truck:        truck,
 	}
 
 	r.Shipments = append(r.Shipments, shipment)

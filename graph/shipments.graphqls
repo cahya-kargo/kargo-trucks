@@ -3,7 +3,7 @@ type Shipment {
  name: String!
  origin: String!
  destination: String!
- delivery_date: String!
+ deliveryDate: String!
  createdAt: String!
  updatedAt: String!
  truck: Truck!

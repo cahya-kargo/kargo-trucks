@@ -1,4 +1,4 @@
-module github.com/cahyacaa/kargo-trucks
+module github.com/cahya-kargo/kargo-trucks
 
 go 1.18
 

@@ -7,8 +7,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/cahyacaa/kargo-trucks/graph"
-	"github.com/cahyacaa/kargo-trucks/graph/generated"
+	"github.com/cahya-kargo/kargo-trucks/graph"
+	"github.com/cahya-kargo/kargo-trucks/graph/generated"
 )
 
 const defaultPort = "8081"

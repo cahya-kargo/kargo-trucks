@@ -7,7 +7,7 @@ type Shipment struct {
 	Name         string `json:"name"`
 	Origin       string `json:"origin"`
 	Destination  string `json:"destination"`
-	DeliveryDate string `json:"delivery_date"`
+	DeliveryDate string `json:"deliveryDate"`
 	CreatedAt    string `json:"createdAt"`
 	UpdatedAt    string `json:"updatedAt"`
 	Truck        *Truck `json:"truck"`
