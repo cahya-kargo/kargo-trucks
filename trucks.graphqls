@@ -1,0 +1,17 @@
+type Truck {
+ id: ID!
+ plateNo: String!
+ createdAt: String!
+ updatedAt: String!
+ page: Int!
+ first: Int!
+}
+
+type Query {
+ paginatedTrucks: [Truck!]!
+}
+
+type Mutation {
+ saveTruck(id: ID, plateNo: String!): Truck!
+ updateTruck(id: ID, plateNo: String!): Truck!
+}
