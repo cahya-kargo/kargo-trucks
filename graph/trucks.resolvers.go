@@ -5,17 +5,17 @@ package graph
 
 import (
 	"context"
-	"fmt"
 	"sort"
 	"time"
 
 	"github.com/cahya-kargo/kargo-trucks/graph/generated"
 	"github.com/cahya-kargo/kargo-trucks/graph/model"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) SaveTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error) {
 	truck := &model.Truck{
-		ID:        fmt.Sprintf("TRUCK-%d", len(r.Trucks)+1),
+		ID:        ksuid.New().String(),
 		PlateNo:   plateNo,
 		IsDeleted: &f,
 		CreatedAt: int(time.Now().UnixMicro()),

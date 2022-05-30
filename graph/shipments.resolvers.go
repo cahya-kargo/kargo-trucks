@@ -6,9 +6,9 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/cahya-kargo/kargo-trucks/graph/model"
+	"github.com/segmentio/ksuid"
 )
 
 func (r *mutationResolver) SaveShipment(ctx context.Context, id *string, name string, origin string, destination string, deliveryDate string, truckID string) (*model.Shipment, error) {
@@ -26,7 +26,7 @@ func (r *mutationResolver) SaveShipment(ctx context.Context, id *string, name st
 	}
 
 	shipment := &model.Shipment{
-		ID:           fmt.Sprintf("SHIPMENT-%d", len(r.Shipments)+1),
+		ID:           ksuid.New().String(),
 		Name:         name,
 		Origin:       origin,
 		Destination:  destination,
