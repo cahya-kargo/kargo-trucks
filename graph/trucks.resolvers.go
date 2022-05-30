@@ -129,11 +129,11 @@ func validatePlateNumber(plateNumber string) bool {
 	} else {
 		trimmedStr := strings.TrimSpace(plateNumber)
 		arrayStr := strings.Split(trimmedStr, " ")
-		matchFirst, _ := regexp.MatchString(`/^[a-zA-Z]{2}$`, arrayStr[0])
-		matchSecond, _ := regexp.MatchString(`/^[0-9]{4}$`, arrayStr[1])
-		matchThird, _ := regexp.MatchString(`/^[a-zA-Z]{1,3}$`, arrayStr[2])
-
-		if matchFirst != false && matchSecond != false && matchThird != false {
+		matchFirst, _ := regexp.MatchString("\\b[a-zA-Z]{2}\\b", arrayStr[0])
+		matchSecond, _ := regexp.MatchString("\\b[0-9]{4}\\b", arrayStr[1])
+		matchThird, _ := regexp.MatchString("\\b[a-zA-Z]{1,3}\\b", arrayStr[2])
+		fmt.Println(matchFirst, matchSecond, matchThird)
+		if matchFirst == false || matchSecond == false || matchThird == false {
 			return false
 		}
 		return true
