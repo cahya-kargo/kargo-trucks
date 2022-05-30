@@ -1,3 +1,9 @@
 type Response {
     message: String!
 }
+
+type Pagination {
+    page: Int!
+    first: Int!
+    totalData: Int!
+}

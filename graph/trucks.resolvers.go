@@ -5,6 +5,7 @@ package graph
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"time"
 
@@ -56,17 +57,44 @@ func (r *mutationResolver) DeleteTruck(ctx context.Context, id *string) (*model.
 	}, nil
 }
 
-func (r *queryResolver) PaginatedTrucks(ctx context.Context) ([]*model.Truck, error) {
+func (r *queryResolver) PaginatedTrucks(ctx context.Context, first *int, page *int, id *string, plateNo *string) (*model.ResponsePagination, error) {
 	var array []*model.Truck
+	var ids string
+	if id != nil {
+		ids = *id
+	}
 	for _, v := range r.Trucks {
-		if v.IsDeleted != &t {
+		if v.ID == ids && v.IsDeleted != &t {
 			array = append(array, v)
 		}
+		if id == nil {
+			array = append(array, v)
+
+		}
 	}
+	var pages int
+	if *page == 0 {
+		pages = *page + 1
+	} else {
+		pages = *page
+	}
+	size := *first*pages + 1
+	if size > len(array) {
+		size = len(array)
+	}
+	fmt.Println(size, pages)
+	result := array[*page:size]
 	sort.SliceStable(array, func(i, j int) bool {
 		return array[i].UpdatedAt > array[j].UpdatedAt
 	})
-	return array, nil
+	return &model.ResponsePagination{
+		Data: result,
+		Meta: &model.Pagination{
+			Page:      *page,
+			First:     *first,
+			TotalData: len(array),
+		},
+	}, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.

@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/99designs/gqlgen v0.17.9
+	github.com/segmentio/ksuid v1.0.4
 	github.com/vektah/gqlparser/v2 v2.4.4
 )
 
@@ -15,7 +16,6 @@ require (
 	github.com/matryer/moq v0.2.7 // indirect
 	github.com/mitchellh/mapstructure v1.3.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/segmentio/ksuid v1.0.4 // indirect
 	github.com/urfave/cli/v2 v2.8.1 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect
 	golang.org/x/mod v0.6.0-dev.0.20220106191415-9b9b3d81d5e3 // indirect

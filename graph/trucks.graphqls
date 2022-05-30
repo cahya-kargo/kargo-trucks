@@ -8,8 +8,14 @@ type Truck {
  first: Int!
 }
 
+
+type ResponsePagination {
+    data: [Truck!]!
+    meta: Pagination!
+}
+
 type Query {
- paginatedTrucks: [Truck!]!
+ paginatedTrucks(first: Int, page:Int, id:String, plateNo: String): ResponsePagination
 }
 
 type Mutation {

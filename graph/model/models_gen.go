@@ -2,8 +2,19 @@
 
 package model
 
+type Pagination struct {
+	Page      int `json:"page"`
+	First     int `json:"first"`
+	TotalData int `json:"totalData"`
+}
+
 type Response struct {
 	Message string `json:"message"`
+}
+
+type ResponsePagination struct {
+	Data []*Truck    `json:"data"`
+	Meta *Pagination `json:"meta"`
 }
 
 type Shipment struct {
