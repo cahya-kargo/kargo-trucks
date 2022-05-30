@@ -1,6 +1,7 @@
 type Truck {
  id: ID!
  plateNo: String!
+ isDeleted: Boolean
  createdAt: String!
  updatedAt: String!
  page: Int!
@@ -14,4 +15,5 @@ type Query {
 type Mutation {
  saveTruck(id: ID, plateNo: String!): Truck!
  updateTruck(id: ID, plateNo: String!): Truck!
+ deleteTruck(id:ID): Response!
 }

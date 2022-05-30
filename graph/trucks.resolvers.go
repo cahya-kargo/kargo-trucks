@@ -11,11 +11,15 @@ import (
 	"github.com/cahya-kargo/kargo-trucks/graph/model"
 )
 
+var t bool = true
+var f bool = false
+
 func (r *mutationResolver) SaveTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error) {
 	fmt.Println(id)
 	truck := &model.Truck{
-		ID:      fmt.Sprintf("TRUCK-%d", len(r.Trucks)+1),
-		PlateNo: plateNo,
+		ID:        fmt.Sprintf("TRUCK-%d", len(r.Trucks)+1),
+		PlateNo:   plateNo,
+		IsDeleted: &f,
 	}
 	r.Trucks = append(r.Trucks, truck)
 	return truck, nil
@@ -25,12 +29,39 @@ func (r *mutationResolver) UpdateTruck(ctx context.Context, id *string, plateNo 
 	truck := &model.Truck{
 		PlateNo: plateNo,
 	}
-	r.Trucks = append(r.Trucks, truck)
+	if *id == "" {
+		panic("Id cannot be null")
+	}
+	for _, v := range r.Trucks {
+		if *id == v.ID {
+			v.PlateNo = plateNo
+		}
+	}
 	return truck, nil
 }
 
+func (r *mutationResolver) DeleteTruck(ctx context.Context, id *string) (*model.Response, error) {
+	if *id == "" {
+		panic("Id cannot be null")
+	}
+	for _, v := range r.Trucks {
+		if *id == v.ID {
+			v.IsDeleted = &t
+		}
+	}
+	return &model.Response{
+		Message: "Success Deleted 1 Data",
+	}, nil
+}
+
 func (r *queryResolver) PaginatedTrucks(ctx context.Context) ([]*model.Truck, error) {
-	return r.Trucks, nil
+	var array []*model.Truck
+	for _, v := range r.Trucks {
+		if v.IsDeleted != &t {
+			array = append(array, v)
+		}
+	}
+	return array, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
@@ -41,3 +72,13 @@ func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//    it when you're done.
+//  - You have helper methods in this file. Move them out to keep these resolver files clean.
+type Response struct {
+	Message string
+}

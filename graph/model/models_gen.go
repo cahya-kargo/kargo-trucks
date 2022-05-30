@@ -2,6 +2,10 @@
 
 package model
 
+type Response struct {
+	Message string `json:"message"`
+}
+
 type Shipment struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
@@ -18,6 +22,7 @@ type Shipment struct {
 type Truck struct {
 	ID        string `json:"id"`
 	PlateNo   string `json:"plateNo"`
+	IsDeleted *bool  `json:"isDeleted"`
 	CreatedAt string `json:"createdAt"`
 	UpdatedAt string `json:"updatedAt"`
 	Page      int    `json:"page"`
