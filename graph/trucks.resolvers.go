@@ -5,8 +5,11 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"regexp"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/cahya-kargo/kargo-trucks/graph/generated"
@@ -15,6 +18,10 @@ import (
 )
 
 func (r *mutationResolver) SaveTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error) {
+	isValidatedPlateNumber := validatePlateNumber(plateNo)
+	if isValidatedPlateNumber == false {
+		return nil, errors.New("Plate number is invalid")
+	}
 	truck := &model.Truck{
 		ID:        ksuid.New().String(),
 		PlateNo:   plateNo,
@@ -27,8 +34,12 @@ func (r *mutationResolver) SaveTruck(ctx context.Context, id *string, plateNo st
 }
 
 func (r *mutationResolver) UpdateTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error) {
+	isValidatedPlateNumber := validatePlateNumber(plateNo)
 	truck := &model.Truck{
 		PlateNo: plateNo,
+	}
+	if isValidatedPlateNumber == false {
+		return nil, errors.New("Plate number is invalid")
 	}
 	if *id == "" {
 		panic("Id cannot be null")
@@ -112,5 +123,23 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func validatePlateNumber(plateNumber string) bool {
+	if plateNumber == "" {
+		return false
+	} else {
+		trimmedStr := strings.TrimSpace(plateNumber)
+		arrayStr := strings.Split(trimmedStr, " ")
+		matchFirst, _ := regexp.MatchString(`/^[a-zA-Z]{2}$`, arrayStr[0])
+		matchSecond, _ := regexp.MatchString(`/^[0-9]{4}$`, arrayStr[1])
+		matchThird, _ := regexp.MatchString(`/^[a-zA-Z]{1,3}$`, arrayStr[2])
+
+		if matchFirst != false && matchSecond != false && matchThird != false {
+			return false
+		}
+		return true
+	}
+
+}
+
 var t bool = true
 var f bool = false
