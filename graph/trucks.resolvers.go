@@ -6,20 +6,20 @@ package graph
 import (
 	"context"
 	"fmt"
+	"sort"
+	"time"
 
 	"github.com/cahya-kargo/kargo-trucks/graph/generated"
 	"github.com/cahya-kargo/kargo-trucks/graph/model"
 )
 
-var t bool = true
-var f bool = false
-
 func (r *mutationResolver) SaveTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error) {
-	fmt.Println(id)
 	truck := &model.Truck{
 		ID:        fmt.Sprintf("TRUCK-%d", len(r.Trucks)+1),
 		PlateNo:   plateNo,
 		IsDeleted: &f,
+		CreatedAt: int(time.Now().UnixMicro()),
+		UpdatedAt: int(time.Now().UnixMicro()),
 	}
 	r.Trucks = append(r.Trucks, truck)
 	return truck, nil
@@ -35,6 +35,7 @@ func (r *mutationResolver) UpdateTruck(ctx context.Context, id *string, plateNo 
 	for _, v := range r.Trucks {
 		if *id == v.ID {
 			v.PlateNo = plateNo
+			v.UpdatedAt = int(time.Now().UnixMicro())
 		}
 	}
 	return truck, nil
@@ -47,6 +48,7 @@ func (r *mutationResolver) DeleteTruck(ctx context.Context, id *string) (*model.
 	for _, v := range r.Trucks {
 		if *id == v.ID {
 			v.IsDeleted = &t
+			v.UpdatedAt = int(time.Now().UnixMicro())
 		}
 	}
 	return &model.Response{
@@ -61,6 +63,9 @@ func (r *queryResolver) PaginatedTrucks(ctx context.Context) ([]*model.Truck, er
 			array = append(array, v)
 		}
 	}
+	sort.SliceStable(array, func(i, j int) bool {
+		return array[i].UpdatedAt > array[j].UpdatedAt
+	})
 	return array, nil
 }
 
@@ -79,6 +84,5 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
-type Response struct {
-	Message string
-}
+var t bool = true
+var f bool = false

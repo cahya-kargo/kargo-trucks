@@ -365,6 +365,9 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
+	{Name: "../response.graphqls", Input: `type Response {
+    message: String!
+}`, BuiltIn: false},
 	{Name: "../shipments.graphqls", Input: `type Shipment {
  id: ID!
  name: String!
@@ -396,14 +399,10 @@ saveShipment(
  id: ID!
  plateNo: String!
  isDeleted: Boolean
- createdAt: String!
- updatedAt: String!
+ createdAt: Int!
+ updatedAt: Int!
  page: Int!
  first: Int!
-}
-
-type Response {
-    message: String!
 }
 
 type Query {
@@ -1786,9 +1785,9 @@ func (ec *executionContext) _Truck_createdAt(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Truck_createdAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1798,7 +1797,7 @@ func (ec *executionContext) fieldContext_Truck_createdAt(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
@@ -1830,9 +1829,9 @@ func (ec *executionContext) _Truck_updatedAt(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(int)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Truck_updatedAt(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1842,7 +1841,7 @@ func (ec *executionContext) fieldContext_Truck_updatedAt(ctx context.Context, fi
 		IsMethod:   false,
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return nil, errors.New("field of type String does not have child fields")
+			return nil, errors.New("field of type Int does not have child fields")
 		},
 	}
 	return fc, nil
