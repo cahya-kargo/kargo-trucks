@@ -68,7 +68,18 @@ func (r *mutationResolver) DeleteTruck(ctx context.Context, id *string) (*model.
 	}, nil
 }
 
-func (r *queryResolver) PaginatedTrucks(ctx context.Context, first *int, page *int, id *string, plateNo *string) (*model.ResponsePagination, error) {
+func (r *mutationResolver) SendTruckDataToEmail(ctx context.Context, email string) (*model.Response, error) {
+	// trucks := r.Trucks
+	var arrayOfemail []string
+	arrayOfemail = append(arrayOfemail, email)
+	go SendMail(arrayOfemail)
+	go createCSV()
+	return &model.Response{
+		Message: "Success",
+	}, nil
+}
+
+func (r *queryResolver) PaginatedTrucks(ctx context.Context, first *int, page *int, id *string, plateNo *string) ([]*model.Truck, error) {
 	var array []*model.Truck
 	var ids string
 	if id != nil {
@@ -98,14 +109,7 @@ func (r *queryResolver) PaginatedTrucks(ctx context.Context, first *int, page *i
 	sort.SliceStable(array, func(i, j int) bool {
 		return array[i].UpdatedAt > array[j].UpdatedAt
 	})
-	return &model.ResponsePagination{
-		Data: result,
-		Meta: &model.Pagination{
-			Page:      *page,
-			First:     *first,
-			TotalData: len(array),
-		},
-	}, nil
+	return result, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
@@ -123,6 +127,18 @@ type queryResolver struct{ *Resolver }
 //  - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //    it when you're done.
 //  - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *Resolver) Init() {
+	for i := 0; i < 20; i++ {
+		truck := &model.Truck{
+			ID:        fmt.Sprintf("TRUCK-%d", len(r.Trucks)+1),
+			PlateNo:   fmt.Sprintf("BB %d CD", len(r.Trucks)+1),
+			IsDeleted: &f,
+			CreatedAt: int(time.Now().UnixMicro()),
+			UpdatedAt: int(time.Now().UnixMicro()),
+		}
+		r.Trucks = append(r.Trucks, truck)
+	}
+}
 func validatePlateNumber(plateNumber string) bool {
 	if plateNumber == "" {
 		return false

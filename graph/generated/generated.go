@@ -45,10 +45,11 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Mutation struct {
-		DeleteTruck  func(childComplexity int, id *string) int
-		SaveShipment func(childComplexity int, id *string, name string, origin string, destination string, deliveryDate string, truckID string) int
-		SaveTruck    func(childComplexity int, id *string, plateNo string) int
-		UpdateTruck  func(childComplexity int, id *string, plateNo string) int
+		DeleteTruck          func(childComplexity int, id *string) int
+		SaveShipment         func(childComplexity int, id *string, name string, origin string, destination string, deliveryDate string, truckID string) int
+		SaveTruck            func(childComplexity int, id *string, plateNo string) int
+		SendTruckDataToEmail func(childComplexity int, email string) int
+		UpdateTruck          func(childComplexity int, id *string, plateNo string) int
 	}
 
 	Pagination struct {
@@ -99,10 +100,11 @@ type MutationResolver interface {
 	SaveTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error)
 	UpdateTruck(ctx context.Context, id *string, plateNo string) (*model.Truck, error)
 	DeleteTruck(ctx context.Context, id *string) (*model.Response, error)
+	SendTruckDataToEmail(ctx context.Context, email string) (*model.Response, error)
 	SaveShipment(ctx context.Context, id *string, name string, origin string, destination string, deliveryDate string, truckID string) (*model.Shipment, error)
 }
 type QueryResolver interface {
-	PaginatedTrucks(ctx context.Context, first *int, page *int, id *string, plateNo *string) (*model.ResponsePagination, error)
+	PaginatedTrucks(ctx context.Context, first *int, page *int, id *string, plateNo *string) ([]*model.Truck, error)
 	PaginatedShipments(ctx context.Context) ([]*model.Shipment, error)
 }
 
@@ -156,6 +158,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.SaveTruck(childComplexity, args["id"].(*string), args["plateNo"].(string)), true
+
+	case "Mutation.sendTruckDataToEmail":
+		if e.complexity.Mutation.SendTruckDataToEmail == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_sendTruckDataToEmail_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.SendTruckDataToEmail(childComplexity, args["email"].(string)), true
 
 	case "Mutation.updateTruck":
 		if e.complexity.Mutation.UpdateTruck == nil {
@@ -469,13 +483,14 @@ type ResponsePagination {
 }
 
 type Query {
- paginatedTrucks(first: Int, page:Int, id:String, plateNo: String): ResponsePagination
+ paginatedTrucks(first: Int, page:Int, id:String, plateNo: String): [Truck!]!
 }
 
 type Mutation {
  saveTruck(id: ID, plateNo: String!): Truck!
  updateTruck(id: ID, plateNo: String!): Truck!
  deleteTruck(id:ID): Response!
+ sendTruckDataToEmail(email: String!):Response!
 }`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
@@ -580,6 +595,21 @@ func (ec *executionContext) field_Mutation_saveTruck_args(ctx context.Context, r
 		}
 	}
 	args["plateNo"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_sendTruckDataToEmail_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["email"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+		arg0, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["email"] = arg0
 	return args, nil
 }
 
@@ -903,6 +933,65 @@ func (ec *executionContext) fieldContext_Mutation_deleteTruck(ctx context.Contex
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_sendTruckDataToEmail(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Mutation_sendTruckDataToEmail(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().SendTruckDataToEmail(rctx, fc.Args["email"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.Response)
+	fc.Result = res
+	return ec.marshalNResponse2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Mutation_sendTruckDataToEmail(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "message":
+				return ec.fieldContext_Response_message(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Response", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_sendTruckDataToEmail_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_saveShipment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Mutation_saveShipment(ctx, field)
 	if err != nil {
@@ -1133,11 +1222,14 @@ func (ec *executionContext) _Query_paginatedTrucks(ctx context.Context, field gr
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.ResponsePagination)
+	res := resTmp.([]*model.Truck)
 	fc.Result = res
-	return ec.marshalOResponsePagination2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐResponsePagination(ctx, field.Selections, res)
+	return ec.marshalNTruck2ᚕᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐTruckᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_paginatedTrucks(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -1148,12 +1240,22 @@ func (ec *executionContext) fieldContext_Query_paginatedTrucks(ctx context.Conte
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "data":
-				return ec.fieldContext_ResponsePagination_data(ctx, field)
-			case "meta":
-				return ec.fieldContext_ResponsePagination_meta(ctx, field)
+			case "id":
+				return ec.fieldContext_Truck_id(ctx, field)
+			case "plateNo":
+				return ec.fieldContext_Truck_plateNo(ctx, field)
+			case "isDeleted":
+				return ec.fieldContext_Truck_isDeleted(ctx, field)
+			case "createdAt":
+				return ec.fieldContext_Truck_createdAt(ctx, field)
+			case "updatedAt":
+				return ec.fieldContext_Truck_updatedAt(ctx, field)
+			case "page":
+				return ec.fieldContext_Truck_page(ctx, field)
+			case "first":
+				return ec.fieldContext_Truck_first(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type ResponsePagination", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type Truck", field.Name)
 		},
 	}
 	defer func() {
@@ -4109,6 +4211,15 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "sendTruckDataToEmail":
+
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_sendTruckDataToEmail(ctx, field)
+			})
+
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "saveShipment":
 
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
@@ -4200,6 +4311,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_paginatedTrucks(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			}
 
@@ -5304,13 +5418,6 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	}
 	res := graphql.MarshalInt(*v)
 	return res
-}
-
-func (ec *executionContext) marshalOResponsePagination2ᚖgithubᚗcomᚋcahyaᚑkargoᚋkargoᚑtrucksᚋgraphᚋmodelᚐResponsePagination(ctx context.Context, sel ast.SelectionSet, v *model.ResponsePagination) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._ResponsePagination(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
