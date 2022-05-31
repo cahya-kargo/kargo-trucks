@@ -14,7 +14,7 @@ import (
 func (r *mutationResolver) SaveShipment(ctx context.Context, id *string, name string, origin string, destination string, deliveryDate string, truckID string) (*model.Shipment, error) {
 	truck := &model.Truck{}
 	for _, v := range r.Trucks {
-		if v.ID == truckID {
+		if v.ID == truckID && v.IsDeleted == &f {
 			truck.ID = v.ID
 			truck.PlateNo = v.PlateNo
 		}
