@@ -69,11 +69,11 @@ func (r *mutationResolver) DeleteTruck(ctx context.Context, id *string) (*model.
 }
 
 func (r *mutationResolver) SendTruckDataToEmail(ctx context.Context, email string) (*model.Response, error) {
-	// trucks := r.Trucks
+	trucks := r.Trucks
 	var arrayOfemail []string
 	arrayOfemail = append(arrayOfemail, email)
 	go SendMail(arrayOfemail)
-	go createCSV()
+	go createCSV(trucks)
 	return &model.Response{
 		Message: "Success",
 	}, nil
